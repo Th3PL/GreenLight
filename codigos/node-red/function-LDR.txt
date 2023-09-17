@@ -1,0 +1,11 @@
+var currentDate = new Date();
+
+var B = {
+    payload: {
+        "variable": "ldrValue",
+        "unit": "",
+        "value": msg.payload.ldrValue.toString(),
+    }
+};
+
+return B;

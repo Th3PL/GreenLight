@@ -1,0 +1,110 @@
+Projeto - GreenLight
+
+Nosso objetivo, é tornar o mundo um lugar mais sustentável por meio da nossa paixão, que é a tecnologia. A seguir segue o passo a passo para a implementação de nosso protótipo de sensor de monitoramento botânico batizado de NatureSync.
+
+
+SETUP:
+
+HARDWARE:
+#Arduino UNO
+#ProtoBoard
+#Led vermelho na porta digital 7 
+#Led verde na porta digital 11
+#Buzzer na porta digital 4
+#Sendor DHT11 na porta digital 10
+#Sensor LDR na porta digital A2
+#LCD nas portas A4 e A5
+
+IMPORTANTE: 
+-Certifique-se de ligar corretamente os componentes nas portas descritas acima
+-No projeto original usamos o LCD com I2c afim de facilitar as conexões, caso esteja utilizando o lcd comum certique-se se adequar as conexões e as Libraries
+
+ArduinoIDE:
+No canto superior direito clique em ferramentas> Gerenciar Bibliotecas... 
+Instale as seguintes Bibliotecas:
+   *ArduinoJson
+   *DHT sensor library
+   *LiquidCrystalI12C
+Copie e cole o código presente na pasta cdigos> arduino> Código-arduinoIDE.txt
+Em seguida lique a placa ao computador, salve, aperte em verificar e em seguida carregar
+EM CASO DE ALGUM ERRO:
+   *Verifique se a porta na qual o arduino esta ligada é a mesma em: Ferramentas> Porta
+   *Verifique se instalou corretamente as bibliotecas listadas acima
+   *Caso esteja utilizando uma placa não oficial, verifique com o fabricante se a necessidade de driver´s externos 
+
+
+Tago.io:
+Para o nosso preojeto iremos utilizar o Tago.io
+Já tendo logado ou criado sua conta iremos precisar criar um novo device Custom MQTT
+Após criado clique em reveal token(iconde de olho) e copie o token clicando no botão "Copy token"
+Salve esse token pois iremos utiliza-lo posteriormente
+
+Node-red:
+Faça a instalação do Node.js - www.nodejs.org
+Abra  o CMD e digite o seguinte comando :
+  npm install -g --unsafe-perm node-red
+Após a instalação, para acessar o recurso digite:
+  node-red 
+Acesse com seu browser a URL:
+  http://localhost:1880
+Já dentro da plataforma, acesse o menu no canto superior direito e clique em "Manege palette" depois em "Install" e instale o seguinte pallete:
+  node-red-node-serialport
+
+CONFIGURANDO FLUXO:
+Network:
+ Serial in - configure as propriedas da seguinte forma: 
+             Serial Port: *Porta serial em que o arduino esta ligado "COM5", por exemplo 
+             Baud Rate: 9600
+ mqtt out - configure as propriedades da seginte forma: 
+             TOPIC:
+               tago/data/post
+             CONNECTION:
+               Server: mqtt.tago.io
+               Client ID: escolha um nome de seua preferência
+             SECURITY:
+               Username: o mesmo do client
+               Passoword: o token que copiamos quando criamos o device
+
+Parser:
+ json - copie e cole o codigo localizado na pasta codigos> node-red> json-codigo.txt
+Function:
+ Function 1 - copie e cole o codigo localizado na pasta codigos> node-red> function-temperatura.txt
+ Function 2 - copie e cole o codigo localizado na pasta codigos> node-red> function-humidade.txt
+ Function 1 - copie e cole o codigo localizado na pasta codigos> node-red> function-LDR.txt
+ 
+ Conexões 
+ o fluxo deve ficar da seguinte forma:
+
+	                   function1
+                         ╱           ╲
+                       ╱               ╲
+  Serial in ――― json   ――  function2 ―― mqtt out
+                       ╲               ╱
+                         ╲           ╱
+                           function3 
+
+por ultimo é só dar o deploy
+
+
+Em caso de dificuldade em ligar o fluxo, use como referência a imagem presente na pasta imgs> Fluxo_node-red.png
+
+CONFIGURANDO DASHBOARD TAGO:
+No menu clique em "add dashboard"
+Dê um nome de sua preferência e aperte em "Create my Dashboard"
+Depois clique me "add widget"
+Escolha um widget de sua preferência
+selecione o device que criamos e escolha dentre as varáveis "humidy", "temperature", "ldrValue"
+Por ultimo clique em create e se quiser repita o processo com as outras variaveis
+
+Pronto! Você acabou de montar seu próprio NatureSync!
+
+
+#MUITO OBRIGAO
+-GrennLight
+
+                                                                                                                                                                                    
+                                                                                                             
+
+
+
+

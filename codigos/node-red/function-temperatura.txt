@@ -1,0 +1,11 @@
+var currentDate = new Date();
+
+var B = {
+    payload: {
+        "variable": "temperature",
+        "unit": "C",
+        "value": msg.payload.temperature.toString(),
+    }
+};
+
+return B;

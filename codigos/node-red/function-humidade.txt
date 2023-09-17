@@ -1,0 +1,11 @@
+var currentDate = new Date();
+
+var B = {
+    payload: {
+        "variable": "humidity",
+        "unit": "%",
+        "value": msg.payload.humidity.toString(),
+    }
+};
+
+return B;
